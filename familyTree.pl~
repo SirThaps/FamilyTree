@@ -1,0 +1,64 @@
+%Facts
+male(greg).
+male(adam).
+male(trent).
+male(martin).
+male(marcus).
+male(gabriel).
+male(dave).
+male(michael).
+female(lucy).
+female(amy).
+female(kgomotso).
+female(naledi).
+female(karen).
+female(michelle).
+parent(trent,greg).
+parent(naledi,greg).
+parent(trent,adam).
+parent(trent,kgomotso).
+parent(karen,adam).
+parent(karen,kgomotso).
+parent(gabriel,marcus).
+parent(gabriel,micelle).
+parent(gabriel,naledi).
+parent(amy,marcus).
+parent(amy,michelle).
+parent(amy,naledi).
+parent(dave,trent).
+parent(dave,martin).
+parent(lucy,trent).
+parent(lucy,martin).
+parent(martin,michael).
+married(amy, gabriel).
+married(gabriel,amy).
+married(dave,lucy).
+married(lucy,dave).
+married(naledi,trent).
+married(trent,naledi).
+
+%Rules
+spouse(X,Y):-married(X,Y),married(Y,X).
+mother(X,Y):-parent(X,Y),female(X).
+father(X,Y):-parent(X,Y),male(X).
+sibling(X,Y):-parent(Z,X),parent(Z,Y), X\=Y.
+brother(X,Y):-sibling(X,Y),male(X).
+sister(X,Y):-sibling(X,Y),female(X).
+half_sibling(X,Y):-parent(Z,X),parent(W,Y), Z\=W, X\=Y.
+half_brother(X,Y):-half_sibling(X,Y), male(X).
+half_sister(X,Y):-half_sibling(X,Y),female(X).
+uncle(X,Y):-sibling(X,Z),parent(Z,Y),male(X).
+aunt(X,Y):-sibling(X,Z),parent(Z,Y),female(X).
+grandparent(X,Y):-parent(X,Z),parent(Z,Y).
+grandmother(X,Y):-grandparent(X,Y),female(X).
+grandfather(X,Y):-grandparent(X,Y),male(X).
+nephew(X,Y):-(brother(Z,Y); sister(Z,Y)),parent(Z,X),male(X).
+niece(X,Y):-(brother(Z,Y);sister(Z,Y)),parent(Z,X),female(X).
+cousin(X,Y):-parent(Z,X),parent(W,Y), sibling(Z,W).
+in_law(X,Y):-married(Y,Z),(sibling(Z,X);parent(Z,X)).
+in_law(X,Y):-married(X,Z),(sibling(Z,Y);parent(Z,Y)).
+brother_in_law(X,Y):-spouse(Y,Z), brother(X,Z),male(X).
+sister_in_law(X,Y):-spouse(Y,Z), sister(X,Z),female(X).
+
+
+
